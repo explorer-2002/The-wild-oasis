@@ -1,20 +1,23 @@
 import BookingRow from "./BookingRow";
 import Table from "../../ui/Table";
 import Menus from "../../ui/Menus";
-import Empty from '../../ui/Empty'
+// import Empty from '../../ui/Empty';
 
 import { useBookings } from "./useBookings";
 import Spinner from "../../ui/Spinner";
 import Pagination from '../../ui/Pagination';
 
 function BookingTable() {
-  const {bookings, isLoading, count} = useBookings();
+  const {isLoading, bookings, error, count} = useBookings();
+  console.log("Bookings: ",bookings);
 
   if(isLoading)
     return <Spinner />
 
-  if(!bookings.length)
-    return <Empty resource="bookings" />
+  if(error)
+    return <div>Error loading bookings: {error.message}</div>
+  // if(!bookings.length)
+  //   return <Empty resource="bookings" />
 
   
 

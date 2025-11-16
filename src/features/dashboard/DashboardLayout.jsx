@@ -1,12 +1,13 @@
 import styled from "styled-components";
-import { useRecentBookings } from "./useRecentBookings";
-import Spinner from "../../ui/Spinner";
-import { useRecentStays } from "./useRecentStays";
+import { useBookings } from "../bookings/useBookings";
+// import { useRecentBookings } from "./useRecentBookings";
+// import Spinner from "../../ui/Spinner";
+// import { useRecentStays } from "./useRecentStays";
 import Stats from "./Stats";
 import { useCabins } from "../cabins/useCabins";
 import SalesChart from "./SalesChart";
-import DurationChart from "./DurationChart";
-import TodayActivity from "../check-in-out/TodayActivity";
+// import DurationChart from "./DurationChart";
+// import TodayActivity from "../check-in-out/TodayActivity";
 
 const StyledDashboardLayout = styled.div`
   display: grid;
@@ -16,23 +17,25 @@ const StyledDashboardLayout = styled.div`
 `;
 
 function DashboardLayout(){
-  const {isLoading1, confirmedStays, numDays} = useRecentStays();
+  // const {isLoading1, confirmedStays, numDays} = useRecentStays();
 
-  const {isLoading2, bookings} = useRecentBookings();
+  // const {isLoading2, bookings} = useRecentBookings();
+    const {bookings} = useBookings();
+  
+  const {cabins} = useCabins();
 
-  const {cabins, isLoading3} = useCabins();
-
-  if(isLoading1 || isLoading2 || isLoading3)
-    return <Spinner />
+  // if(isLoading1 || isLoading2 || isLoading3)
+  //   return <Spinner />
 
   return (
     <StyledDashboardLayout>
-      <Stats bookings={bookings} confirmedStays={confirmedStays} numDays={numDays} cabinCount={cabins?.length}/>
-      <TodayActivity />
-      <DurationChart confirmedStays={confirmedStays}/>
-      <SalesChart bookings={bookings} numDays={numDays} />
+      <Stats bookings={bookings} numDays={5} cabinCount={cabins?.length} />
+      {/* <TodayActivity />
+      <DurationChart confirmedStays={confirmedStays}/> */}
+      <SalesChart bookings={bookings} numDays={10} />
     </StyledDashboardLayout>
-  )
+  );
+  // return <>Dashboard</>
 }
 
 export default DashboardLayout;

@@ -12,6 +12,7 @@ import PageNotFound from './pages/PageNotFound'
 
 import { GlobalStyles } from './styles/GlobalStyles'
 import AppLayout from './ui/AppLayout'
+import './styles/index.css'
 
 import {QueryClient, QueryClientProvider} from '@tanstack/react-query'
 import { DarkModeProvider } from './context/DarkModeContext'
@@ -28,6 +29,7 @@ const queryClient = new QueryClient({
     }
 })
 
+{/* <ProtectedRoute> */}
 export default function App() {
   return (
     <DarkModeProvider>

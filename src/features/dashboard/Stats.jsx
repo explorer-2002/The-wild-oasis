@@ -2,14 +2,15 @@ import { HiOutlineBanknotes, HiOutlineBriefcase, HiOutlineCalendarDays } from "r
 import Stat from "./Stat";
 import { formatCurrency } from "../../utils/helpers";
 
-export default function Stats({bookings, confirmedStays, numDays, cabinCount}) {
+export default function Stats({bookings, numDays, cabinCount}) {
     const numBookings = bookings?.length;
 
     const sales = bookings?.reduce((acc, cur) => acc + cur.totalPrice, 0);
 
-    const checkins = confirmedStays?.length;
+    const checkins = bookings?.filter(booking => booking?.status === "confirmed");
 
-    const occupation = confirmedStays?.reduce((acc, cur) => acc + cur.numNights,0)/(numDays*cabinCount);
+    const occupation = checkins?.reduce((acc, cur) => acc + cur.numNights,0)/(numDays*cabinCount);
+
   return (
     <>
       <Stat title="Bookings" color="blue" icon={<HiOutlineBriefcase />} value={numBookings} />

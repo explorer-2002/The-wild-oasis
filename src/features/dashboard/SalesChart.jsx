@@ -32,10 +32,10 @@ function SalesChart({ numDays, bookings}){
   const data = allDates.map(date => {
     return {
       label:format(date, "MM dd"),
-      totalSales:bookings?.filter(booking => isSameDay(date, new Date(booking.created_at))).reduce((acc,cur)  => acc + cur.totalPrice, 0),
-      extrasSales:bookings?.filter(booking => isSameDay(date, new Date(booking.created_at))).reduce((acc,cur)  => acc + cur.extrasPrice, 0)
+      totalSales:bookings?.filter(booking => isSameDay(date, new Date(booking.checkInDate))).reduce((acc,cur)  => acc + cur.totalPrice, 0),
+      extrasSales:bookings?.filter(booking => isSameDay(date, new Date(booking.checkOutDate))).reduce((acc,cur)  => acc + cur.totalPrice, 0)
     }
-  })
+  });
 
 const colors = isDarkMode
   ? {

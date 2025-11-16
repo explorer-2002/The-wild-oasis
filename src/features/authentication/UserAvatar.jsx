@@ -1,5 +1,8 @@
+import { useSelector } from "react-redux";
 import styled from "styled-components";
-import { useUser } from "./useUser";
+import { getUser } from "../../store/slices/userSlice";
+// import { useUser } from "./useUser";
+import defaultUser from '../../../public/default-user.jpg';
 
 const StyledUserAvatar = styled.div`
   display: flex;
@@ -21,14 +24,16 @@ const Avatar = styled.img`
   outline: 2px solid var(--color-grey-100);
 `;
 
-function UserAvatar(){
-  const {user} = useUser();
-  const {fullName, avatar} = user.user_metadata;
+function UserAvatar() {
+  // const {user} = useUser();
+  // const {fullName, avatar} = user.user_metadata;
+  const user = useSelector(getUser);
+  console.log('User: ', user?.avatar);
 
   return (
     <StyledUserAvatar>
-      <Avatar src={avatar || "default-user.jpg"} alt={`avatar of ${fullName}`} />
-      <span>{fullName}</span>
+      <Avatar src={`${user?.avatar ?? defaultUser}`} alt={`avatar of Person`} />
+      {/* <span>{fullName}</span> */}
     </StyledUserAvatar>
   )
 }

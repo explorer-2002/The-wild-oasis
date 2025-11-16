@@ -91,7 +91,7 @@ function Toggle({id}){
           x:window.innerWidth - rect.width - rect.x,
           y:rect.y + rect.height + 8
     })  
-        openId === '' || Number(openId) !== Number(id) ? open(id) : close();
+        openId === '' || openId !== id ? open(id) : close();
     }
 
     return (
@@ -105,7 +105,7 @@ function List({id, children}){
     const {openId, position, close} = useContext(MenusContext)
     const {closeRef} = useOutsideClick(close, false)
 
-    if(Number(openId) !== Number(id))return null;
+    if(openId !== id)return null;
 
     return (
       createPortal(
