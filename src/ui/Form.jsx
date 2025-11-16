@@ -4,7 +4,7 @@ const Form = styled.form`
     margin-left:10%;
 
   ${(props) =>
-  
+
     props.type === "regular" &&
     css`
       padding: 2.4rem 4rem;
@@ -26,7 +26,7 @@ const Form = styled.form`
 `;
 
 Form.defaultProps = {
-  type:'regular'
+  type: 'regular'
 }
 
 export default Form;

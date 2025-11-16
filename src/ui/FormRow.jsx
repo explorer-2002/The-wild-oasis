@@ -1,14 +1,21 @@
-import styled from "styled-components";
+import styled, { css } from "styled-components";
 
 
 const StyledFormRow = styled.div`
   display: grid;
   align-items: center;
-  grid-template-columns: 24rem 1fr 1.2fr;
+
+   ${(props) =>
+
+    props.type === "regular" &&
+    css`
+       grid-template-columns: 24rem 1fr 1.2fr;
+         width: fit-content;
+    `}
+
   gap: 2.4rem;
-
   padding: 1.2rem 1.2rem;
-
+  margin: 0 auto;
   &:first-child {
     padding-top: 0;
   }
@@ -24,7 +31,7 @@ const StyledFormRow = styled.div`
   &:has(button) {
     display: flex;
     justify-content: flex-end;
-    gap: 1.2rem;
+    gap: 4.5rem;
   }
 `;
 
@@ -37,15 +44,19 @@ const Error = styled.span`
   color: var(--color-red-700);
 `
 
-export default function FormRow({label, error, children}) {
+StyledFormRow.defaultProps = {
+  type: 'regular'
+}
+
+export default function FormRow({ label, error, children, type }) {
   return (
-    <StyledFormRow>
-        {label && <Label htmlFor={children.props}>{label}</Label>}
-        {/* <Input type="text" id="name" {...register("name",{
+    <StyledFormRow type={type}>
+      {label && <Label htmlFor={children.props}>{label}</Label>}
+      {/* <Input type="text" id="name" {...register("name",{
           required:"This field is mandatory"
         })} /> */}
-            {children}
-        {error && <Error>{error}</Error>}
+      {children}
+      {error && <Error>{error}</Error>}
     </StyledFormRow>
   )
 }

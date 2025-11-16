@@ -1,51 +1,73 @@
-import { PAGE_SIZE } from "../utils/constants";
+// import { PAGE_SIZE } from "../utils/constants";
 import { getToday } from "../utils/helpers";
 import supabase from "./supabase";
 
+// sortBy, page
+export async function getBookings(filter, page) {
+  console.log("Filter: ", filter);
+  // let query = supabase.from('bookings')
+  //   .select("*,cabins(name), guests(fullName, email)", { count: "exact" })
 
-export async function getBookings(filter, sortBy, page){
-   let query = supabase.from('bookings')
-  .select("*,cabins(name), guests(fullName, email)", {count:"exact"})
+  const queryParams = new URLSearchParams();
 
+  if(filter){
+    queryParams.append(filter.field, filter.value);
+  }
+  // if (filter)
+  //   query = query.eq(filter.field, filter.value)
 
-  if(filter)
-    query = query.eq(filter.field, filter.value)
+  // if (sortBy) {
+  //   query = query.order(sortBy.field, {
+  //     ascending: (sortBy.direction === "asc")
+  //   })
+  // }
 
-  if(sortBy){
-    query = query.order(sortBy.field,{
-      ascending: (sortBy.direction === "asc")
-  })
+  if (page) {
+    // const from = (page - 1) * PAGE_SIZE;
+    // const to = page * PAGE_SIZE - 1;
+    // query = query.range(from, to)
+    queryParams.append("page", page);
   }
 
-  if(page){
-    const from = (page-1)*PAGE_SIZE;
-    const to = page*PAGE_SIZE - 1;
-    query = query.range(from, to)
-  }
+  // const { data, error, count } = await query;
 
-  const {data, error, count} = await query;
+  // if (error) {
+  //   console.error(error);
+  //   throw new Error("Bookings could not be loaded")
+  // }
 
-  if(error){
-    console.error(error);
-    throw new Error("Bookings could not be loaded")
-  }
+  console.log("Query Params: ", queryParams.toString());
 
-  return {data, count};
+  const result = await fetch(`${import.meta.env.VITE_BASE_API_URL}/api/bookings?${queryParams}`, {
+    method: 'GET'
+  });
+
+  const data = await result.json();
+  const bookings = data?.data || [];
+  console.log("Bookings: ", bookings);
+  
+  return { bookings, count: bookings.length };
 }
 
 export async function getBooking(id) {
-  const { data, error } = await supabase
-    .from("bookings")
-    .select("*, cabins(*), guests(*)")
-    .eq("id", id)
-    .single();
+  // const { data, error } = await supabase
+  //   .from("bookings")
+  //   .select("*, cabins(*), guests(*)")
+  //   .eq("id", id)
+  //   .single();
 
-  if (error) {
-    console.error(error);
-    throw new Error("Booking not found");
-  }
+  // if (error) {
+  //   console.error(error);
+  //   throw new Error("Booking not found");
+  // }
 
-  return data;
+  const data = await fetch(`${import.meta.env.VITE_BASE_API_URL}/api/bookings/${id}`, {
+    method: 'GET'
+  });
+
+  const result = await data.json();
+
+  return result?.data || {};
 }
 
 // Returns all BOOKINGS that are were created after the given date. Useful to get bookings created in the last 30 days, for example.
@@ -117,13 +139,46 @@ export async function updateBooking(id, obj) {
   return data;
 }
 
+export async function createBooking({ newBooking }) {
+  console.log("newBooking: ", newBooking);
+  let data;
+
+  try {
+    const result = await fetch(`${import.meta.env.VITE_BASE_API_URL}/api/bookings`, {
+      method: 'POST',
+      headers: {
+        "Content-Type": 'application/json'
+      },
+      body: JSON.stringify(newBooking)
+    });
+
+    if (!result.ok) {
+      // If not, get the error message from the body and throw an error
+      const errorData = await result.json();
+      throw new Error(errorData.message || `HTTP error! status: ${result.status}`);
+    }
+
+    data = await result.json();
+  } catch (error) {
+    console.log("Error: ", error);
+  }
+
+  return data || [];
+}
+
 export async function deleteBooking(id) {
   // REMEMBER RLS POLICIES
-  const { data, error } = await supabase.from("bookings").delete().eq("id", id);
+  // const { data, error } = await supabase.from("bookings").delete().eq("id", id);
 
-  if (error) {
-    console.error(error);
-    throw new Error("Booking could not be deleted");
-  }
-  return data;
+  // if (error) {
+  //   console.error(error);
+  //   throw new Error("Booking could not be deleted");
+  // }
+  // return data;
+  const result = await fetch(`${import.meta.env.VITE_BASE_API_URL}/api/bookings/${id}`, {
+    method: 'DELETE'
+  });
+
+  const deletedData = await result.json();
+  return deletedData;
 }

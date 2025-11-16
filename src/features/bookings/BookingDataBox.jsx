@@ -1,16 +1,13 @@
 import styled from "styled-components";
 import { format, isToday } from "date-fns";
 import {
-  HiOutlineChatBubbleBottomCenterText,
-  HiOutlineCheckCircle,
-  HiOutlineCurrencyDollar,
   HiOutlineHomeModern,
 } from "react-icons/hi2";
 
-import DataItem from "../../ui/DataItem";
-import { Flag } from "../../ui/Flag";
+// import DataItem from "../../ui/DataItem";
+// import { Flag } from "../../ui/Flag";
 
-import { formatDistanceFromNow, formatCurrency } from "../../utils/helpers";
+import { formatDistanceFromNow } from "../../utils/helpers";
 
 const StyledBookingDataBox = styled.section`
   /* Box */
@@ -68,56 +65,50 @@ const Guest = styled.div`
   }
 `;
 
-const Price = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 1.6rem 3.2rem;
-  border-radius: var(--border-radius-sm);
-  margin-top: 2.4rem;
+// const Price = styled.div`
+//   display: flex;
+//   align-items: center;
+//   justify-content: space-between;
+//   padding: 1.6rem 3.2rem;
+//   border-radius: var(--border-radius-sm);
+//   margin-top: 2.4rem;
 
-  background-color: ${(props) =>
-    props.isPaid ? "var(--color-green-100)" : "var(--color-yellow-100)"};
-  color: ${(props) =>
-    props.isPaid ? "var(--color-green-700)" : "var(--color-yellow-700)"};
+//   background-color: ${(props) =>
+//     props.isPaid ? "var(--color-green-100)" : "var(--color-yellow-100)"};
+//   color: ${(props) =>
+//     props.isPaid ? "var(--color-green-700)" : "var(--color-yellow-700)"};
 
-  & p:last-child {
-    text-transform: uppercase;
-    font-size: 1.4rem;
-    font-weight: 600;
-  }
+//   & p:last-child {
+//     text-transform: uppercase;
+//     font-size: 1.4rem;
+//     font-weight: 600;
+//   }
 
-  svg {
-    height: 2.4rem;
-    width: 2.4rem;
-    color: currentColor !important;
-  }
-`;
+//   svg {
+//     height: 2.4rem;
+//     width: 2.4rem;
+//     color: currentColor !important;
+//   }
+// `;
 
-const Footer = styled.footer`
-  padding: 1.6rem 4rem;
-  font-size: 1.2rem;
-  color: var(--color-grey-500);
-  text-align: right;
-`;
+// const Footer = styled.footer`
+//   padding: 1.6rem 4rem;
+//   font-size: 1.2rem;
+//   color: var(--color-grey-500);
+//   text-align: right;
+// `;
 
 // A purely presentational component
 function BookingDataBox({ booking }) {
   const {
-    created_at,
-    startDate,
-    endDate,
-    numNights,
-    numGuests,
-    cabinPrice,
-    extrasPrice,
-    totalPrice,
-    hasBreakfast,
-    observations,
-    isPaid,
-    guests: { fullName: guestName, email, country, countryFlag, nationalID },
-    cabins: { name: cabinName },
-  } = booking;
+    checkInDate,
+    checkOutDate,
+    numberOfNights,
+    numberOfGuests,
+    guestName,
+    guestEmail,
+    roomId
+    } = booking;
 
   return (
     <StyledBookingDataBox>
@@ -125,45 +116,43 @@ function BookingDataBox({ booking }) {
         <div>
           <HiOutlineHomeModern />
           <p>
-            {numNights} nights in Cabin <span>{cabinName}</span>
+            {numberOfNights} nights in Cabin <span>{roomId?.roomNumber}</span>
           </p>
         </div>
 
         <p>
-          {format(new Date(startDate), "EEE, MMM dd yyyy")} (
-          {isToday(new Date(startDate))
+          {format(new Date(checkInDate), "EEE, MMM dd yyyy")} (
+          {isToday(new Date(checkInDate))
             ? "Today"
-            : formatDistanceFromNow(startDate)}
-          ) &mdash; {format(new Date(endDate), "EEE, MMM dd yyyy")}
+            : formatDistanceFromNow(checkInDate)}
+          ) &mdash; {format(new Date(checkOutDate), "EEE, MMM dd yyyy")}
         </p>
       </Header>
 
       <Section>
         <Guest>
-          {countryFlag && <Flag src={countryFlag} alt={`Flag of ${country}`} />}
           <p>
-            {guestName} {numGuests > 1 ? `+ ${numGuests - 1} guests` : ""}
+            {guestName} {numberOfGuests > 1 ? `+ ${numberOfGuests - 1} guests` : ""}
           </p>
           <span>&bull;</span>
-          <p>{email}</p>
+          <p>{guestEmail}</p>
           <span>&bull;</span>
-          <p>National ID {nationalID}</p>
         </Guest>
 
-        {observations && (
+        {/* {observations && (
           <DataItem
             icon={<HiOutlineChatBubbleBottomCenterText />}
             label="Observations"
           >
             {observations}
           </DataItem>
-        )}
+        )} */}
 
-        <DataItem icon={<HiOutlineCheckCircle />} label="Breakfast included?">
+        {/* <DataItem icon={<HiOutlineCheckCircle />} label="Breakfast included?">
           {hasBreakfast ? "Yes" : "No"}
-        </DataItem>
+        </DataItem> */}
 
-        <Price isPaid={isPaid}>
+        {/* <Price isPaid={isPaid}>
           <DataItem icon={<HiOutlineCurrencyDollar />} label={`Total price`}>
             {formatCurrency(totalPrice)}
 
@@ -174,12 +163,12 @@ function BookingDataBox({ booking }) {
           </DataItem>
 
           <p>{isPaid ? "Paid" : "Will pay at property"}</p>
-        </Price>
+        </Price> */}
       </Section>
 
-      <Footer>
-        <p>Booked {format(new Date(created_at), "EEE, MMM dd yyyy, p")}</p>
-      </Footer>
+      {/* <Footer>
+        <p>Booked {format(new Date(created), "EEE, MMM dd yyyy, p")}</p>
+      </Footer> */}
     </StyledBookingDataBox>
   );
 }

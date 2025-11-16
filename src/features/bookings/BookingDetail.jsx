@@ -38,9 +38,10 @@ function BookingDetail() {
   const moveBack = useMoveBack();
 
   const statusToTagName = {
-    unconfirmed: "blue",
-    "checked-in": "green",
-    "checked-out": "silver",
+    "cancelled" : "red",
+    "pending": "blue",
+    "confirmed": "silver",
+    "completed": "green",
   };
 
   if (isLoading)
@@ -61,15 +62,14 @@ function BookingDetail() {
 
       <BookingDataBox booking={booking} />
 
-      {status === "unconfirmed" &&
+      {status === "pending" &&
         <Button onClick={() => navigate(`/checkin/${bookingId}`)}>
-          Check in
+          Confirm Booking
         </Button>
       }
 
       <ButtonGroup>
-
-        {status === "checked-in" &&
+        {status === "confirmed" &&
           <Button onClick={() => checkout(bookingId)} disabled={isCheckingOut} >
             Check out
           </Button>
